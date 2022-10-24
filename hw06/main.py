@@ -1,5 +1,4 @@
 
-from operator import truediv
 from pathlib import Path
 import sys
 import re
@@ -64,7 +63,7 @@ for k,v in zip(CYRILLIC_SYMBOLS,TRANSLATION):
 
 #! парсинг файлів
 def get_extension(filename: str) -> str:
-    return Path(filename).suffix[1:].upper()
+    return Path(filename).suffix[1:]
 
 
 
@@ -74,26 +73,25 @@ def scanning(folder: Path)->None:
             if item.name not in ['images','videos','documents','archives','music']:
                 FOLDERS.append(item)
             continue
-        ext = get_extension(item.name).lower()
+        ext = get_extension(item.name)
         fullname= folder / item.name
+        print(ext)
         for k,v in FILE_TYPES.items():
             if ext in k:
                 v.append(fullname)
-            else:
-                normalize(fullname.name)
-
-
 
 
 #! нормалізація файлів
 def normalize(name: str) -> str:
+    ext=''
     try:
         ext,t_name = name.split('.')[::-1]
     except:
-        pass
-    t_name = t_name.translate(TRANS)
-    t_name = re.sub(r'\W', '_', t_name)
-    t_name=t_name+'.'+ext
+        t_name = name.translate(TRANS)
+    finally:
+        t_name = t_name.translate(TRANS)
+        t_name = re.sub(r'\W', '_', t_name)
+        t_name=t_name+'.'+ext
     return t_name
 
 #! cтворення та переміщення файлів у папки
@@ -115,6 +113,14 @@ def handle_archives(filename:Path,path:Path):
         archive_folder.rmdir()
     filename.unlink()
 
+
+def handle_folder(path:Path):
+    try:
+        path.rmdir()
+    except:
+        print(f"Не вдалось видалити папку {path}")
+
+
 #! основний скрипт
 def main(path:Path):
     scanning(path)
@@ -129,6 +135,8 @@ def main(path:Path):
     for file in FILE_TAGS.get('archives'):
         handle_archives(file , path / 'archives')
         
+    for file in FOLDERS[::-1]:
+        handle_folder(path)
     
 
         
