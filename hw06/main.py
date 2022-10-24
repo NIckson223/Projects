@@ -72,10 +72,10 @@ def scanning(folder: Path)->None:
         if item.is_dir():
             if item.name not in ['images','videos','documents','archives','music']:
                 FOLDERS.append(item)
+                scanning(item)
             continue
         ext = get_extension(item.name)
         fullname= folder / item.name
-        print(ext)
         for k,v in FILE_TYPES.items():
             if ext in k:
                 v.append(fullname)
