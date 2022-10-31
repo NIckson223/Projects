@@ -1,0 +1,1 @@
+print("Package 'Clean folder' is imported")
