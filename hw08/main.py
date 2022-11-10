@@ -51,6 +51,17 @@ sat=[]
 sun=[]
 days=[mn,tues,wedn,thur,fri,sat,sun]
 
+
+hb_days={
+    "Monday":mn,
+    'Tuesday':tues,
+    'Wendsday':wedn,
+    'Thursday':thur,
+    'Friday':fri,
+    'Saturnday':sat,
+    'Sunday':sun
+    
+}
 def get_birthdays_per_week(users):
     global mn,tues,wedn,thur,fri,sat,sun
     
@@ -64,20 +75,14 @@ def get_birthdays_per_week(users):
         if current_date.month == date_birthday.month:
             difference =date_birthday.day-current_date.day
             if difference<7:
-                if difference==0 or difference==-1 or difference==-2:
-                    mn.append(name_person)
-                elif difference==1:
-                    tues.append(name_person)
-                elif difference==2:
-                    wedn.append(name_person)
-                elif difference==3:
-                    thur.append(name_person)
-                elif difference==4:
-                    fri.append(name_person)
-                elif difference==5:
-                    sat.append(name_person)
-                elif difference==6:
-                    sun.append(name_person)
+                difference= 0 if difference==-1 or difference==-2 else difference 
+                for k, v in hb_days.items():
+                    if k == str(difference).translate(dict_days):
+                        v.append(name_person)
+
+                
+                
+                
                 
 
 def days_of_week(days):
