@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 
-FILE_NAME = "ab.bin"
+FILE_NAME = "./hw12/ab.bin"
 SERIALIZATION_PATH = Path(FILE_NAME)
 
 class Field():
@@ -88,8 +88,8 @@ class AddresBook(UserDict):
     
     def find_by_name(self,name):
         for k,v in self.data.items():
-            if k==name or k==name.lower():
-                return f'Name:{name}, Phone: {v}'
+            if k==name or k.lower()==name.lower():
+                return f'Name:{k}, Phone: {v}'
 
     
     def find_for_phone(self,phone):
@@ -193,6 +193,7 @@ class Birthday(Field):
 
 
 if __name__=='__main__':
+    find =True
     ab = AddresBook()
     
     if SERIALIZATION_PATH.exists():
@@ -218,15 +219,16 @@ if __name__=='__main__':
         birthday3 = Birthday("01.02.2001")
         rec3 = Record(name3, phone3, birthday3)
 
-        find =True
-        while find:
-            request = input('Write request:\n>>>')
-            if request.isnumeric():
-                print(ab.find_for_phone(request))
-            elif request.lower() in ['exit','bye','good bye','q']:
-                print("Bye!")
-                find=False
-            else:
-                print(ab.find_by_name(request))
+        
+    while find:
+        request = input('Write request:\n>>>')
+        if request.isnumeric():
+            print(ab.find_for_phone(request))
+        elif request.lower() in ['exit','bye','good bye','q']:
+            print("Bye!")
+            find=False
+        else:
+            print(ab.find_by_name(request))
+    ab.serialize(FILE_NAME)
 
     
